@@ -57,6 +57,15 @@ flutter run --dart-define=IRANGMAP_ENABLE_MAPS=true
 
 배너 광고는 App ID와 별개로 ad unit id가 더 필요합니다. ad unit id를 받기 전까지는 광고를 강제로 띄우지 않도록 되어 있습니다.
 
+가장 편한 방식은 로컬 전용 파일 `assets/config/app.local.json`에 넣는 것입니다.
+
+```json
+{
+  "iosBannerAdUnitId": "ca-app-pub-xxxx/yyyy",
+  "androidBannerAdUnitId": ""
+}
+```
+
 ```bash
 flutter run \
   --dart-define=IRANGMAP_ENABLE_MAPS=true \
@@ -77,5 +86,7 @@ flutter run \
 - `flutter analyze` 통과
 - `flutter test` 통과
 - `pod install` 완료
+- Android SDK / cmdline-tools / licenses / NDK / CMake 정리 완료
+- Android debug APK 빌드 완료: `build/app/outputs/flutter-apk/app-debug.apk`
 - iOS는 전체 `Xcode.app`는 존재하지만 현재 `xcode-select`가 Command Line Tools를 가리켜 `xcodebuild`를 못 찾는 상태
-- Android 빌드는 아직 Android SDK가 없어 진행 불가
+- Android 운영 광고를 쓰려면 Android 전용 AdMob App ID / banner ad unit id가 추가로 필요

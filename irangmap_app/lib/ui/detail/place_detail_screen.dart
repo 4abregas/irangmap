@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import '../../core/bootstrap/app_bootstrap.dart';
 import '../../core/config/app_environment.dart';
+import '../../core/config/app_local_config.dart';
 import '../../data/models/place_model.dart';
 
 class PlaceDetailScreen extends ConsumerStatefulWidget {
@@ -42,8 +43,7 @@ class _PlaceDetailScreenState extends ConsumerState<PlaceDetailScreen> {
     _bannerAd?.load();
   }
 
-  void _maybeLoadAd(AppBootstrapState bootstrapState) {
-    final bannerAdUnitId = AppEnvironment.bannerAdUnitId;
+  void _maybeLoadAd(AppBootstrapState bootstrapState, String bannerAdUnitId) {
     if (!bootstrapState.adsReady || bannerAdUnitId.isEmpty || _adLoadRequested) {
       return;
     }
@@ -291,6 +291,7 @@ class _PlaceDetailScreenState extends ConsumerState<PlaceDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final bootstrapAsync = ref.watch(appBootstrapProvider);
+    final localConfigAsync = ref.watch(appLocalConfigProvider);
 
     return Scaffold(
       appBar: AppBar(title: const Text('장소 정보')),
@@ -303,7 +304,14 @@ class _PlaceDetailScreenState extends ConsumerState<PlaceDetailScreen> {
           ),
         ),
         data: (bootstrapState) {
-          _maybeLoadAd(bootstrapState);
+          final bannerAdUnitId =
+              AppEnvironment.bannerAdUnitId.isNotEmpty
+                  ? AppEnvironment.bannerAdUnitId
+                  : localConfigAsync.maybeWhen(
+                      data: (config) => config.bannerAdUnitId,
+                      orElse: () => '',
+                    );
+          _maybeLoadAd(bootstrapState, bannerAdUnitId);
 
           if (!bootstrapState.firebaseReady) {
             return Center(

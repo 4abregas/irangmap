@@ -80,10 +80,12 @@
 - 현재 iOS `GoogleService-Info.plist`의 `BUNDLE_ID`는 `com.irangmap`이며, 프로젝트도 여기에 맞췄습니다.
 - iOS 최소 배포 타깃은 `14.0`으로 상향했습니다.
 - iOS 실제 Maps/AdMob 값은 `ios/Flutter/AppSecrets.xcconfig`에 두고, 저장소에는 테스트 기본값만 남기도록 보안 구조를 정리했습니다.
+- 배너 광고는 `assets/config/app.local.json` 로컬 파일 또는 dart-define으로만 켜지도록 해서, 실 ad unit id를 저장소에 남기지 않도록 정리했습니다.
 - Maps는 native API key 없이는 안정적으로 켜지지 않으므로, 기본값은 안전 모드입니다.
 - Android release 서명은 `android/key.properties`와 keystore가 있어야 운영용으로 마무리됩니다.
 - 현재 환경에서는 `flutter pub get`, `flutter analyze`, `flutter test`, `pod install`까지 완료했습니다.
-- 현재 실제 빌드 블로커는 두 가지입니다: `xcode-select`가 아직 full Xcode로 전환되지 않은 점, Android SDK가 없는 점.
+- Android는 SDK / licenses / NDK / CMake 설치와 `app-debug.apk` 빌드까지 완료했습니다.
+- 현재 실제 빌드 블로커는 `xcode-select`가 아직 full Xcode로 전환되지 않은 점 하나입니다.
 
 ## 큰 방향
 
@@ -95,12 +97,11 @@
 ## 다음에 할 일 우선순위
 
 1. `xcode-select`를 `/Applications/Xcode.app/Contents/Developer`로 전환하고 `xcodebuild -runFirstLaunch` 완료
-2. Android SDK 설치 또는 기존 SDK 경로를 `flutter config --android-sdk`로 연결
-3. Android/iOS 각각 실제 실행 및 에러 로그 점검
-4. 지도 활성화 (`IRANGMAP_ENABLE_MAPS=true`) 후 동작 확인
-5. banner ad unit id를 받아 광고 실제 연결
-6. 홈 화면 필터를 Firestore 데이터 구조와 더 정교하게 연결
-7. 관리자 검수 화면을 실데이터 기반으로 연결
+2. iOS 시뮬레이터 또는 기기 기준 `flutter build ios --simulator --no-codesign` / `flutter run` 확인
+3. 지도 활성화 (`IRANGMAP_ENABLE_MAPS=true`) 후 Android/iOS 각각 동작 확인
+4. Android 전용 AdMob App ID / banner ad unit id를 받아 광고 실제 연결
+5. 홈 화면 필터를 Firestore 데이터 구조와 더 정교하게 연결
+6. 관리자 검수 화면을 실데이터 기반으로 연결
 
 ## 내가 할 수 있는 것
 

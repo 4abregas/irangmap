@@ -45,6 +45,7 @@ app.*.map.json
 /android/app/release
 /android/local.properties
 /android/key.properties
+/assets/config/app.local.json
 /ios/Flutter/AppSecrets.xcconfig
 *.jks
 *.keystore
