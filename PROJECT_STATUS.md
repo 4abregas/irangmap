@@ -32,10 +32,11 @@
 ### 3. iOS 환경 정리
 
 - 누락되어 있던 `Podfile` 추가
-- `AppConfig.xcconfig`로 Maps/AdMob 키를 관리하도록 구성
+- `AppConfig.xcconfig`는 저장소 안전 기본값만 두고, 실제 키는 로컬 전용 `AppSecrets.xcconfig`에서 덮어쓰도록 구성
 - `Info.plist`에 앱 이름, AdMob App ID, Maps key, embedded views, 위치 설명 추가
-- `AppDelegate.swift`에서 Google Maps API key를 읽어 등록하도록 처리
+- `AppDelegate.swift`에서 Firebase/Google Maps를 native 레벨에서 먼저 안전하게 초기화하고, 설정 파일이 빠져도 즉시 크래시하지 않도록 처리
 - `GoogleService-Info.plist`는 로컬에서 넣을 수 있게 `.gitignore`에 추가
+- `GoogleService-Info.plist`의 `BUNDLE_ID`와 맞도록 iOS bundle id를 `com.irangmap`으로 정리
 
 관련 파일:
 
@@ -76,9 +77,13 @@
 ## 중요한 내용
 
 - iOS는 구조는 잡아두었지만, 실제 `GoogleService-Info.plist`는 Firebase Console에서 받은 진짜 파일이 반드시 필요합니다.
+- 현재 iOS `GoogleService-Info.plist`의 `BUNDLE_ID`는 `com.irangmap`이며, 프로젝트도 여기에 맞췄습니다.
+- iOS 최소 배포 타깃은 `14.0`으로 상향했습니다.
+- iOS 실제 Maps/AdMob 값은 `ios/Flutter/AppSecrets.xcconfig`에 두고, 저장소에는 테스트 기본값만 남기도록 보안 구조를 정리했습니다.
 - Maps는 native API key 없이는 안정적으로 켜지지 않으므로, 기본값은 안전 모드입니다.
 - Android release 서명은 `android/key.properties`와 keystore가 있어야 운영용으로 마무리됩니다.
-- 현재 환경에서는 `flutter`/`dart`가 없어 실제 빌드, `flutter pub get`, `pod install`, `flutter analyze`는 수행하지 못했습니다.
+- 현재 환경에서는 `flutter pub get`, `flutter analyze`, `flutter test`, `pod install`까지 완료했습니다.
+- 현재 실제 빌드 블로커는 두 가지입니다: `xcode-select`가 아직 full Xcode로 전환되지 않은 점, Android SDK가 없는 점.
 
 ## 큰 방향
 
@@ -89,14 +94,13 @@
 
 ## 다음에 할 일 우선순위
 
-1. Flutter SDK 설치 후 `flutter pub get`
-2. iOS용 `GoogleService-Info.plist` 추가
-3. iOS `pod install`
-4. Android/iOS Maps 및 AdMob 실제 키 입력
-5. Android/iOS 각각 실제 실행 및 에러 로그 점검
-6. 지도 활성화 (`IRANGMAP_ENABLE_MAPS=true`) 후 동작 확인
-7. 홈 화면 필터를 Firestore 데이터 구조와 더 정교하게 연결
-8. 관리자 검수 화면을 실데이터 기반으로 연결
+1. `xcode-select`를 `/Applications/Xcode.app/Contents/Developer`로 전환하고 `xcodebuild -runFirstLaunch` 완료
+2. Android SDK 설치 또는 기존 SDK 경로를 `flutter config --android-sdk`로 연결
+3. Android/iOS 각각 실제 실행 및 에러 로그 점검
+4. 지도 활성화 (`IRANGMAP_ENABLE_MAPS=true`) 후 동작 확인
+5. banner ad unit id를 받아 광고 실제 연결
+6. 홈 화면 필터를 Firestore 데이터 구조와 더 정교하게 연결
+7. 관리자 검수 화면을 실데이터 기반으로 연결
 
 ## 내가 할 수 있는 것
 
@@ -119,8 +123,10 @@
 - iOS Firebase 앱 등록 후 받은 `GoogleService-Info.plist`
 - Android/iOS Google Maps API key
 - Android/iOS AdMob App ID
+- Android/iOS banner ad unit id
 - Android 운영 배포용 keystore와 `key.properties`
-- Apple Developer Team / Bundle ID 확정값
+- Apple Developer Team 정보
+- Android SDK 경로 또는 Android Studio 설치 여부
 - 실제로 보고 있는 에러 로그 또는 캡처
 
 ## 에이전트/스킬 메모

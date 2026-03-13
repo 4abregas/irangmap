@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import '../../core/bootstrap/app_bootstrap.dart';
+import '../../core/config/app_environment.dart';
 import '../../data/models/place_model.dart';
 
 class PlaceDetailScreen extends ConsumerStatefulWidget {
@@ -17,16 +18,12 @@ class PlaceDetailScreen extends ConsumerStatefulWidget {
 class _PlaceDetailScreenState extends ConsumerState<PlaceDetailScreen> {
   BannerAd? _bannerAd;
   bool _isBannerAdLoaded = false;
+  bool _adLoadRequested = false;
 
-  @override
-  void initState() {
-    super.initState();
-    _loadAd();
-  }
-
-  void _loadAd() {
+  void _loadAd(String adUnitId) {
+    _bannerAd?.dispose();
     _bannerAd = BannerAd(
-      adUnitId: 'ca-app-pub-3940256099942544/6300978111',
+      adUnitId: adUnitId,
       size: AdSize.banner,
       request: const AdRequest(),
       listener: BannerAdListener(
@@ -43,6 +40,21 @@ class _PlaceDetailScreenState extends ConsumerState<PlaceDetailScreen> {
       ),
     );
     _bannerAd?.load();
+  }
+
+  void _maybeLoadAd(AppBootstrapState bootstrapState) {
+    final bannerAdUnitId = AppEnvironment.bannerAdUnitId;
+    if (!bootstrapState.adsReady || bannerAdUnitId.isEmpty || _adLoadRequested) {
+      return;
+    }
+
+    _adLoadRequested = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) {
+        return;
+      }
+      _loadAd(bannerAdUnitId);
+    });
   }
 
   String _typeLabel(String type) {
@@ -291,6 +303,8 @@ class _PlaceDetailScreenState extends ConsumerState<PlaceDetailScreen> {
           ),
         ),
         data: (bootstrapState) {
+          _maybeLoadAd(bootstrapState);
+
           if (!bootstrapState.firebaseReady) {
             return Center(
               child: Padding(

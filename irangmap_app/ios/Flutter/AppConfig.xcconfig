@@ -1,3 +1,4 @@
-// Safe defaults for local iOS setup. Replace with your production values later.
+// Repository-safe defaults. Put real values in AppSecrets.xcconfig or CI.
 IRANGMAP_GOOGLE_MAPS_API_KEY_IOS =
 IRANGMAP_ADMOB_APP_ID_IOS = ca-app-pub-3940256099942544~1458002511
+#include? "AppSecrets.xcconfig"

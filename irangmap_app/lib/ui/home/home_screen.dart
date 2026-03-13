@@ -317,7 +317,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 ),
               ),
               const SizedBox(height: 24),
-              _SectionHeader(
+              const _SectionHeader(
                 title: '대시보드 맵',
                 subtitle: AppEnvironment.mapsPreviewEnabled
                     ? '선택한 장소를 지도와 카드에서 함께 비교할 수 있어요.'
@@ -346,15 +346,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   ),
                 )
               else
-                _SetupCalloutCard(
+                const _SetupCalloutCard(
                   title: '지도 미리보기는 준비되면 바로 켤 수 있게 해두었습니다.',
                   body: AppEnvironment.setupGuide,
-                  tone: const Color(0xFFEAF2FF),
+                  tone: Color(0xFFEAF2FF),
                   icon: Icons.map_rounded,
                 ),
               const SizedBox(height: 24),
               if (featuredPlaces.isNotEmpty) ...[
-                _SectionHeader(
+                const _SectionHeader(
                   title: '오늘의 추천',
                   subtitle: '점수와 편의시설 기준으로 먼저 보이는 장소예요.',
                 ),
@@ -378,7 +378,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 ),
                 const SizedBox(height: 24),
               ],
-              _SectionHeader(
+              const _SectionHeader(
                 title: '바로 이용할 장소',
                 subtitle: '주소, 요금, 편의시설을 한 장에서 확인할 수 있어요.',
               ),
@@ -387,13 +387,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ),
         ),
         if (filteredPlaces.isEmpty)
-          SliverToBoxAdapter(
+          const SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(18, 0, 18, 32),
+              padding: EdgeInsets.fromLTRB(18, 0, 18, 32),
               child: _SetupCalloutCard(
                 title: '조건에 맞는 장소를 찾지 못했어요.',
                 body: '검색어를 비우거나 필터를 전체로 바꾸면 더 많은 결과를 볼 수 있습니다.',
-                tone: const Color(0xFFFFF1D8),
+                tone: Color(0xFFFFF1D8),
                 icon: Icons.search_off_rounded,
               ),
             ),
@@ -479,7 +479,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ),
         ],
         const SizedBox(height: 18),
-        _SectionHeader(
+        const _SectionHeader(
           title: '안정화 체크리스트',
           subtitle: '안드로이드와 iOS 모두 같은 기준으로 준비할 수 있게 정리했습니다.',
         ),

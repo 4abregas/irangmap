@@ -25,7 +25,9 @@ final appBootstrapProvider = FutureProvider<AppBootstrapState>((ref) async {
   String? adsMessage;
 
   try {
-    await Firebase.initializeApp();
+    if (Firebase.apps.isEmpty) {
+      await Firebase.initializeApp();
+    }
     firebaseReady = true;
   } catch (error) {
     firebaseMessage = _friendlyMessage(
@@ -37,7 +39,7 @@ final appBootstrapProvider = FutureProvider<AppBootstrapState>((ref) async {
 
   try {
     await MobileAds.instance.initialize();
-    const requestConfiguration = RequestConfiguration(
+    final requestConfiguration = RequestConfiguration(
       tagForChildDirectedTreatment: TagForChildDirectedTreatment.yes,
       tagForUnderAgeOfConsent: TagForUnderAgeOfConsent.yes,
       maxAdContentRating: MaxAdContentRating.g,
