@@ -31,8 +31,11 @@ class GoogleMapServiceImpl implements MapService {
         zoom: 14.0,
       ),
       markers: googleMarkers,
-      myLocationEnabled: true,
-      myLocationButtonEnabled: true,
+      myLocationEnabled: false,
+      myLocationButtonEnabled: false,
+      mapToolbarEnabled: false,
+      zoomControlsEnabled: false,
+      compassEnabled: false,
     );
   }
 }
